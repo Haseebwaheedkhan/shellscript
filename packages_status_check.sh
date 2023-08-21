@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 # Check if the argument is provided
 if [ -z "$1" ]; then
     echo "Please provide a package list type as an argument: DB, CS, SS, API, or MON"
@@ -40,9 +41,7 @@ esac
 error_status=""
 # Loop through the array and find the versions
 for package in "${packages[@]}"; do
-    
-        
- 
+
         if [ "$(dpkg -s $package 2>/dev/null |  grep 'Status: install ok installed')" == 'Status: install ok installed' ]; then
                 echo -e "\n$package installation Status = Installed Successfully"
 
@@ -54,6 +53,16 @@ for package in "${packages[@]}"; do
         fi
 done
 
+kernel_version=$(uname -r)
+if [ "$kernel_version" == "5.10.0-19-amd64" ]; then
+    echo Kernel Version = Correct
+else
+        RED='\033[41m'
+        NC="\033[0m"
+        echo -e "\n${RED}Kernel Version  = ${RED}Issue Found (Current Version: $kernel_version | Required: 5.10.0-19-amd64)${NC}"
+        error_status=$error_status"\nKernel Version"
+fi
+
 
 if [ $(echo -n "$error_status" | wc -m) -eq 0 ]; then
         echo -e "\n\n\n
@@ -63,7 +72,3 @@ if [ $(echo -n "$error_status" | wc -m) -eq 0 ]; then
 else
         echo -e "\nError Found in following packages\n$error_status"
 fi
-
-
-
-
