@@ -55,7 +55,9 @@ done
 
 kernel_version=$(uname -r)
 if [ "$kernel_version" == "5.10.0-19-amd64" ]; then
-    echo Kernel Version = Correct
+        GREEN='\033[0;32m'  # Green color code
+        NC='\033[0m'        # No color code
+        echo -e "\nKernel Version = ${GREEN}Correct${NC}"
 else
         RED='\033[41m'
         NC="\033[0m"
